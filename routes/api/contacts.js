@@ -7,29 +7,20 @@ const { schemas } = require("../../models/contact");
 
 const router = express.Router();
 
-router.get("/", authenticate, ctrl.listContacts);
+router.use(authenticate);
 
-router.get("/:id", authenticate, isValidId, ctrl.getContactById);
+router.get("/", ctrl.listContacts);
 
-router.post(
-  "/",
-  authenticate,
-  validateBody(schemas.addSchema),
-  ctrl.addContact
-);
+router.get("/:id", isValidId, ctrl.getContactById);
 
-router.delete("/:id", authenticate, ctrl.removeContact);
+router.post("/", validateBody(schemas.addSchema), ctrl.addContact);
 
-router.put(
-  "/:id",
-  authenticate,
-  validateBody(schemas.addSchema),
-  ctrl.updateContact
-);
+router.delete("/:id", ctrl.removeContact);
+
+router.put("/:id", validateBody(schemas.addSchema), ctrl.updateContact);
 
 router.patch(
   "/:id/favorite",
-  authenticate,
   validateBody(schemas.updateFavoriteSchema),
   ctrl.updateFavorite
 );
